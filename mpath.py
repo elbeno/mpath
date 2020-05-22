@@ -14,6 +14,3 @@ class MPaths (object):
             self.pathTable[n] = pathSoFar
             self.buildPathTable(ps, prefix=pathSoFar)
 
-    def getRoots (self):
-        return map(lambda (_, r, __): r, self.pathTree)
-
