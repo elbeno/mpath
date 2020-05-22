@@ -18,7 +18,7 @@ winA = [ ( "srcRoot"
          , [ ( "charSrc", "art/chars", [] )
            , ( "docs"
              , "Docs"
-             , [ ( "items", "items.json", [] )
+             , [ ( "itemsDoc", "items.json", [] )
                ]
              )
            ]
