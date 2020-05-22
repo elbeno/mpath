@@ -10,7 +10,7 @@ class MPaths (object):
 
     def buildPathTable (self, tree, prefix=""):
         for n, r, ps in tree:
-            pathSoFar = os.path.join(prefix, r)
+            pathSoFar = os.path.normpath(os.path.join(prefix, r))
             self.pathTable[n] = pathSoFar
             self.buildPathTable(ps, prefix=pathSoFar)
 

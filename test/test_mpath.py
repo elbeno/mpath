@@ -36,6 +36,10 @@ class Test_MPaths (unittest.TestCase):
     def test_cannotConstructEmptyMPaths (self):
         self.assertRaises(TypeError, lambda: mpath.MPaths())
 
+    def test_buildPathsDict_removesTrailingSlashLinux (self):
+        mpaths = mpath.MPaths([("root", "/home/gfixler/", [])])
+        self.assertEquals(mpaths.pathTable["root"], "/home/gfixler")
+
     def test_canGetPathsByName (self):
         mpaths = mpath.MPaths(linA)
         self.assertEquals(mpaths.pathTable["root"], "/home/gfixler/proj")
