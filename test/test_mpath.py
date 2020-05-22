@@ -5,25 +5,27 @@ from nose.plugins.attrib import attr
 from .. import mpath
 
 
-linA = [ ( "/home/gfixler/proj"
-         , [ ( "charSrc", "art/chars" )
-           , ( "charExp", "assets/chars" )
+linA = [ ( "root"
+         , "/home/gfixler/proj"
+         , [ ( "charSrc", "art/chars", [] )
+           , ( "charExp", "assets/chars", [] )
            ]
          )
        ]
 
-winA = [ ( "C:/game"
-         , [ ( "charSrc", "art/chars" )
+winA = [ ( "srcRoot"
+         , "C:/game"
+         , [ ( "charSrc", "art/chars", [] )
            , ( "docs"
-             , [ ("Docs"
-                 , ("items", "items.json")
-                 )
+             , "Docs"
+             , [ ( "items", "items.json", [] )
                ]
              )
            ]
          )
-       , ( "Z:/game"
-         , [ ( "charExp", "assets/chars" )
+       , ( "expRoot"
+         , "Z:/game"
+         , [ ( "charExp", "assets/chars", [] )
            ]
          )
        ]
