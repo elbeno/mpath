@@ -92,3 +92,22 @@ home|/home/user
         expected = [(0, "home|/home/user"), (1, "p1|projA"), (2, "backup|backup"), (1, "p2|proj2")]
         self.assertEquals(util.parseHier(tabbedHier), expected)
 
+    def test_raisesOnOutdentToNonExistingPriorIndentLevel (self):
+        badLayout = """
+root|C:/
+    dir|folder
+  bad|uhoh
+"""
+        self.assertRaises(RuntimeError, lambda: util.parseHier(badLayout))
+
+    def test_sectionsCanHaveTheirOwnIndentLevels (self):
+        hier = """
+root|Z:/
+    game|game
+      art|art
+    docs|docs
+        doc1|doc1.txt
+"""
+        expected = [(0, "root|Z:/"), (1, "game|game"), (2, "art|art"), (1, "docs|docs"), (2, "doc1|doc1.txt")]
+        self.assertEquals(util.parseHier(hier), expected)
+

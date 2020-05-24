@@ -50,7 +50,5 @@ class Test_MPaths (unittest.TestCase):
 
 class Test_parseLayout (unittest.TestCase):
 
-    def test_raisesOnBadOutdent (self):
-        badLayout = "root|C:/\n    dir|folder\n  bad|uhoh"
-        self.assertRaises(RuntimeError, lambda: mpath.parseLayout(badLayout))
+    pass
 
