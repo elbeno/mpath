@@ -18,11 +18,7 @@ def parseIndent (line):
         return (0, line)
 
 def parseHier (string, normalized=True, filterEmpty=True):
-    rawlines = string.splitlines()
-    if filterEmpty:
-        lines = filter(ident, rawlines)
-    else:
-        lines = rawlines
+    lines = string.splitlines()
     rawindents = map(parseIndent, lines)
     if filterEmpty:
         indents = filter(snd, rawindents)
