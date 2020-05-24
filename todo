@@ -1,0 +1,38 @@
+MPath
+
+    store as parts
+
+mpath.fromLayout()
+
+    enableDot=True
+    no tabs
+    no backslashes
+    no spaces, beyond indentation
+    pipe separation
+
+layout example:
+
+    projLayout = """
+    root|D:/p4/wwe2k22/Main
+        art|Art
+            charSrc|Characters20
+        assets|Assets
+            charExp|Characters
+                roster|Docs/Jtables/CharacterMapping.jtable
+    exports|Z:/game/exports
+    """
+
+fromLayoutExample
+
+help(mpath), etc
+
+path methods (on dot syntax):
+
+    mpath.path.exists()
+              .isFile()
+              .isDir()
+              .inP4()
+              .opened() -> [], [sdas, nnacu]
+              .openedBy("sdas") -> False
+              .lastEdited()
+
