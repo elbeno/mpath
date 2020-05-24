@@ -47,3 +47,10 @@ class Test_MPaths (unittest.TestCase):
         self.assertEquals(mpaths.pathTable["charExp"], "/home/gfixler/proj/assets/chars")
         self.assertEquals(set(mpaths.pathTable.keys()), set(["root", "charSrc", "charExp"]))
 
+
+class Test_parseLayout (unittest.TestCase):
+
+    def test_raisesOnBadOutdent (self):
+        badLayout = "root|C:/\n    dir|folder\n  bad|uhoh"
+        self.assertRaises(RuntimeError, lambda: mpath.parseLayout(badLayout))
+
