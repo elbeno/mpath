@@ -58,7 +58,7 @@ class Test_parseHier (unittest.TestCase):
         string
         """
         expected = [(8, "This is"), (12, "a test"), (12, "of"), (16, "a multiline"), (8, "string")]
-        self.assertEquals(util.parseHier(example, normalized=False), expected)
+        self.assertEquals(util.parseHier(example, normalize=False), expected)
 
     def test_multilineString_filterEmpty (self):
         example = """
@@ -80,5 +80,5 @@ class Test_parseHier (unittest.TestCase):
         string
         """
         expected = [(0, ""), (8, "This is"), (12, "a test"), (12, "of"), (16, "a multiline"), (8, "string"), (8, "")]
-        self.assertEquals(util.parseHier(example, normalized=False, filterEmpty=False), expected)
+        self.assertEquals(util.parseHier(example, normalize=False, filterEmpty=False), expected)
 

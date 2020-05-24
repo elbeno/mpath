@@ -2,6 +2,7 @@ import re
 
 
 ident = lambda x: x
+true = lambda _: True
 fst = lambda (x, _): x
 snd = lambda (_, y): y
 onFst = lambda f: lambda (x, y): (f(x), y)
@@ -17,16 +18,15 @@ def parseIndent (line):
     else:
         return (0, line)
 
-def parseHier (string, normalized=True, filterEmpty=True):
+def parseHier (string, normalize=True, filterEmpty=True):
     lines = string.splitlines()
-    rawindents = map(parseIndent, lines)
-    if filterEmpty:
-        indents = filter(snd, rawindents)
-    else:
-        indents = rawindents
-    if normalized:
-        levels = sorted(list(set(map(fst, indents))))
+    withIndents = map(parseIndent, lines)
+    p = snd if filterEmpty else true
+    filtered = filter(p, withIndents)
+    if normalize:
+        levels = sorted(list(set(map(fst, filtered))))
         normMap = dict(map(swap, enumerate(levels)))
-        return map(onFst(lambda x: normMap[x]), indents)
-    return indents
+        normalized = map(onFst(lambda x: normMap[x]), filtered)
+        return normalized
+    return filtered
 
