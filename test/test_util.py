@@ -82,3 +82,8 @@ class Test_parseHier (unittest.TestCase):
         expected = [(0, ""), (8, "This is"), (12, "a test"), (12, "of"), (16, "a multiline"), (8, "string"), (8, "")]
         self.assertEquals(util.parseHier(example, normalize=False, filterEmpty=False), expected)
 
+    def test_worksWithTabsEvenThoughtIHateThem (self):
+        tabbedLayout = "home|/home/user\n\tp1|projA\n\t\tbackup|backup\n\tp2|proj2"
+        expected = [(0, "home|/home/user"), (1, "p1|projA"), (2, "backup|backup"), (1, "p2|proj2")]
+        self.assertEquals(util.parseHier(tabbedLayout), expected)
+
