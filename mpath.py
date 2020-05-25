@@ -3,20 +3,6 @@ import os
 from . import util
 
 
-class MPaths (object):
-
-    def __init__ (self, pathTree):
-        self.pathTree = pathTree
-        self.pathTable = {}
-        self.buildPathTable(pathTree)
-
-    def buildPathTable (self, tree, prefix=""):
-        for n, r, ps in tree:
-            pathSoFar = os.path.normpath(os.path.join(prefix, r))
-            self.pathTable[n] = pathSoFar
-            self.buildPathTable(ps, prefix=pathSoFar)
-
-
 def parseLayout (layoutStr):
     hier = util.parseHier(layoutStr)
     layout = []
@@ -49,4 +35,18 @@ def parseLayout (layoutStr):
         elif level > curLev + 1:
             raise RuntimeError, "Level increase from " + str(curLev) + " to " + str(level) + " in hierarchy line " + str(lineNum) + ": " + str((level, namedPart))
     return layout
+
+
+class MPaths (object):
+
+    def __init__ (self, pathTree):
+        self.pathTree = pathTree
+        self.pathTable = {}
+        self.buildPathTable(pathTree)
+
+    def buildPathTable (self, tree, prefix=""):
+        for n, r, ps in tree:
+            pathSoFar = os.path.normpath(os.path.join(prefix, r))
+            self.pathTable[n] = pathSoFar
+            self.buildPathTable(ps, prefix=pathSoFar)
 
