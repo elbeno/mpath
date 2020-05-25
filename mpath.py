@@ -40,7 +40,7 @@ def parseLayout (layoutStr):
     return layout
 
 
-class MPaths (object):
+class MPaths (dict):
 
     def __init__ (self, pathTree):
         self.pathTree = pathTree
@@ -50,7 +50,7 @@ class MPaths (object):
     def buildPathTable (self, tree, prefix=""):
         for n, r, ps in tree:
             pathSoFar = os.path.normpath(os.path.join(prefix, r))
-            self.pathTable[n] = pathSoFar
+            self[n] = pathSoFar
             self.buildPathTable(ps, prefix=pathSoFar)
 
 

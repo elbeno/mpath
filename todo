@@ -1,7 +1,5 @@
 MPath
 
-    mpath["path"] gets full path, Linux style
-
     store paths as parts
     no backslashes
     enableDot=True
