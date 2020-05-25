@@ -90,3 +90,11 @@ class Test_MPaths (unittest.TestCase):
         self.assertEquals(mpaths.pathTable["itemsDoc"], "C:/game/art/chars/Docs/items.json")
         self.assertEquals(set(mpaths.pathTable.keys()), set(["srcRoot", "charSrc", "docs", "itemsDoc", "expRoot", "charExp"]))
 
+    def test_fromLayoutFunction (self):
+        # this is a helper function, not part of the MPath class
+        mpaths = mpath.fromLayoutStr(winALayout)
+        self.assertEquals(mpaths.pathTable["srcRoot"], "C:/game")
+        self.assertEquals(mpaths.pathTable["charSrc"], "C:/game/art/chars")
+        self.assertEquals(mpaths.pathTable["itemsDoc"], "C:/game/art/chars/Docs/items.json")
+        self.assertEquals(set(mpaths.pathTable.keys()), set(["srcRoot", "charSrc", "docs", "itemsDoc", "expRoot", "charExp"]))
+

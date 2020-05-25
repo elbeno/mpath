@@ -3,6 +3,9 @@ import os
 from . import util
 
 
+comp2 = lambda f: lambda g: lambda x: f(g(x))
+
+
 def parseLayout (layoutStr):
     hier = util.parseHier(layoutStr)
     layout = []
@@ -49,4 +52,7 @@ class MPaths (object):
             pathSoFar = os.path.normpath(os.path.join(prefix, r))
             self.pathTable[n] = pathSoFar
             self.buildPathTable(ps, prefix=pathSoFar)
+
+
+fromLayoutStr = comp2(MPaths)(parseLayout)
 
