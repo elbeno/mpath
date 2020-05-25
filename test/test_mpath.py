@@ -30,6 +30,14 @@ winA = [ ( "srcRoot"
          )
        ]
 
+winALayout = """
+srcRoot|C:/game
+    charSrc|art/chars
+    docs|Docs
+        itemsDoc|items.json
+expRoot|Z:/game
+    charExp|assets/chars
+"""
 
 class Test_MPaths (unittest.TestCase):
 
@@ -50,5 +58,27 @@ class Test_MPaths (unittest.TestCase):
 
 class Test_parseLayout (unittest.TestCase):
 
-    pass
+    def test_buildsTree (self):
+        layout = mpath.parseLayout(winALayout)
+        expected = [('srcRoot',
+                     'C:/game',
+                     [('charSrc',
+                       'art/chars',
+                       [('docs',
+                         'Docs',
+                         [('itemsDoc',
+                           'items.json',
+                           [('charExp',
+                             'assets/chars',
+                             []
+                            )]
+                          )]
+                        )]
+                      )]
+                    ),
+                    ('expRoot',
+                     'Z:/game',
+                     [])
+                   ]
+        self.assertEquals(layout, expected)
 
