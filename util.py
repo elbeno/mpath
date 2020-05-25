@@ -38,7 +38,7 @@ def parseHier (string, normalize=True, filterEmpty=True):
             normLevel = normLevel + 1
         elif indent < curIndent:
             while True:
-                if indentStack == []: # less efficient, but feels safer than: indenindent indentStack[-1]
+                if indentStack == []:
                     raise RuntimeError, "outdent to non-existing indent level in line " + str(linenum + 1) + ": " + str((indent, part))
                 curIndent = indentStack.pop()
                 if curIndent == indent:
