@@ -42,8 +42,9 @@ def parseLayout (layoutStr):
 
 class MPaths (dict):
 
-    def __init__ (self, pathTree):
+    def __init__ (self, pathTree, dotSyntax=True):
         self.pathTree = pathTree
+        self.dotSyntax = dotSyntax
         self.pathTable = {}
         self.buildPathTable(pathTree)
 
@@ -52,6 +53,9 @@ class MPaths (dict):
             pathSoFar = os.path.normpath(os.path.join(prefix, r))
             self[n] = pathSoFar
             self.buildPathTable(ps, prefix=pathSoFar)
+        if self.dotSyntax:
+            for key in self.keys():
+                setattr(self, key, self[key])
 
 
 fromLayoutStr = comp2(MPaths)(parseLayout)

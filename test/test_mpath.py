@@ -98,3 +98,9 @@ class Test_MPaths (unittest.TestCase):
         self.assertEquals(mpaths["itemsDoc"], "C:/game/art/chars/Docs/items.json")
         self.assertEquals(set(mpaths.keys()), set(["srcRoot", "charSrc", "docs", "itemsDoc", "expRoot", "charExp"]))
 
+    def test_dotSyntaxAllowsForEvenEasierPathLookup (self):
+        mpaths = mpath.fromLayoutStr(winALayout)
+        self.assertEquals(mpaths.srcRoot, "C:/game")
+        self.assertEquals(mpaths.charSrc, "C:/game/art/chars")
+        self.assertEquals(mpaths.itemsDoc, "C:/game/art/chars/Docs/items.json")
+

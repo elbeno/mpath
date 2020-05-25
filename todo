@@ -2,7 +2,6 @@ MPath
 
     store paths as parts
     no backslashes
-    enableDot=True
 
     path methods:
 
