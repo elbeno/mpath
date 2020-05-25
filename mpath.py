@@ -3,6 +3,7 @@ import os
 from . import util
 
 
+ident = lambda x: x
 comp2 = lambda f: lambda g: lambda x: f(g(x))
 
 
@@ -38,6 +39,21 @@ def parseLayout (layoutStr):
         elif level > curLev + 1:
             raise RuntimeError, "Level increase from " + str(curLev) + " to " + str(level) + " in hierarchy line " + str(lineNum) + ": " + str((level, namedPart))
     return layout
+
+
+class Path (object):
+
+    def __init__ (self, path):
+        self.linuxStyle = True if path[0] == "/" else False
+        self.parts = filter(ident, path.split("/"))
+        self.userPath = path
+
+    def __str__ (self):
+        path = "/" if self.linuxStyle else "" + "/".join(self.parts)
+        return path
+
+    def __eq__ (self, other):
+        return str(self) == str(other)
 
 
 class MPaths (dict):

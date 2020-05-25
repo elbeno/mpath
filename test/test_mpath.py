@@ -66,6 +66,38 @@ class Test_parseLayout (unittest.TestCase):
         self.assertEquals(layout, expected)
 
 
+class Test_PathPart (unittest.TestCase):
+
+    def test_strYieldsPassedString (self):
+        part = mpath.Path("root")
+        self.assertEquals(str(part), "root")
+
+    def test_equalityWorksWithStrings (self):
+        part = mpath.Path("root")
+        self.assertEquals(part, "root")
+
+    def test_equalityWorksWithOtherPathParts (self):
+        partA = mpath.Path("root")
+        partB = mpath.Path("root")
+        self.assertEquals(partA, partB)
+
+    def test_canGetParts_linux (self):
+        part = mpath.Path("/home/user/proj")
+        self.assertEquals(part.parts, ["home", "user", "proj"])
+
+    def test_canGetParts_linux_ignoresTrailing (self):
+        part = mpath.Path("/home/user/proj/")
+        self.assertEquals(part.parts, ["home", "user", "proj"])
+
+    def test_canGetParts_windows (self):
+        part = mpath.Path("C:/Users/user/projects")
+        self.assertEquals(part.parts, ["C:", "Users", "user", "projects"])
+
+    def test_canGetParts_windows_ignoresTrailing (self):
+        part = mpath.Path("C:/Users/user/projects///")
+        self.assertEquals(part.parts, ["C:", "Users", "user", "projects"])
+
+
 class Test_MPaths (unittest.TestCase):
 
     def test_cannotConstructEmptyMPaths (self):
