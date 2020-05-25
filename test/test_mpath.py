@@ -66,7 +66,7 @@ class Test_parseLayout (unittest.TestCase):
         self.assertEquals(layout, expected)
 
 
-class Test_PathPart (unittest.TestCase):
+class Test_Path (unittest.TestCase):
 
     def test_strYieldsPassedString (self):
         part = mpath.Path("root")
@@ -76,7 +76,7 @@ class Test_PathPart (unittest.TestCase):
         part = mpath.Path("root")
         self.assertEquals(part, "root")
 
-    def test_equalityWorksWithOtherPathParts (self):
+    def test_equalityWorksWithOtherPathInstances (self):
         partA = mpath.Path("root")
         partB = mpath.Path("root")
         self.assertEquals(partA, partB)
