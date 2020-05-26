@@ -268,6 +268,20 @@ class Test_MPaths (unittest.TestCase):
         self.assertEquals(mpaths["itemsDoc"], "C:/game/Docs/items.json")
         self.assertEquals(set(mpaths.keys()), set(["srcRoot", "charSrc", "docs", "itemsDoc", "expRoot", "charExp"]))
 
+    def test_fromLayoutStrFunctionDefaultsToEnablingDotSyntax (self):
+        # this is a helper function, not part of the MPath class
+        mpaths = mpath.fromLayoutStr(winALayout)
+        self.assertEquals(mpaths.srcRoot, "C:/game")
+        self.assertEquals(mpaths.charSrc, "C:/game/art/chars")
+        self.assertEquals(mpaths.itemsDoc, "C:/game/Docs/items.json")
+
+    def test_fromLayoutStrFunctionDisablingDotSyntax (self):
+        # this is a helper function, not part of the MPath class
+        mpaths = mpath.fromLayoutStr(winALayout, dotSyntax=False)
+        self.assertRaises(AttributeError, lambda: mpaths.srcRoot)
+        self.assertRaises(AttributeError, lambda: mpaths.charSrc)
+        self.assertRaises(AttributeError, lambda: mpaths.itemsDoc)
+
     def test_dotSyntaxAllowsForEvenEasierPathLookup (self):
         mpaths = mpath.fromLayoutStr(winALayout)
         self.assertEquals(mpaths.srcRoot, "C:/game")

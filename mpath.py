@@ -4,7 +4,6 @@ from . import util
 
 
 ident = lambda x: x
-comp2 = lambda f: lambda g: lambda x: f(g(x))
 
 
 def parseLayoutStr (layoutStr):
@@ -75,7 +74,7 @@ class Path (str):
 
 class MPaths (dict):
 
-    def __init__ (self, pathTree, dotSyntax=True):
+    def __init__ (self, pathTree, dotSyntax=True, *args, **kwargs):
         self.pathTree = pathTree
         self.dotSyntax = dotSyntax
         self.pathTable = {}
@@ -100,5 +99,6 @@ class MPaths (dict):
         print str(self) # not testable, unfortunately
 
 
-fromLayoutStr = comp2(MPaths)(parseLayoutStr)
+def fromLayoutStr (layoutStr, *args, **kwargs):
+    return MPaths(parseLayoutStr(layoutStr), *args, **kwargs)
 
