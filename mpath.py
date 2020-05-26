@@ -49,11 +49,21 @@ class Path (object):
         self.userPath = path
 
     def __str__ (self):
-        path = "/" if self.linuxStyle else "" + "/".join(self.parts)
+        prefix = "/" if self.linuxStyle else ""
+        path = prefix + "/".join(self.parts)
         return path
 
     def __eq__ (self, other):
         return str(self) == str(other)
+
+    def exists (self):
+        return os.path.exists(str(self))
+
+    def isfile (self):
+        return os.path.isfile(str(self))
+
+    def isdir (self):
+        return os.path.isdir(str(self))
 
 
 class MPaths (dict):

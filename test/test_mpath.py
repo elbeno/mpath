@@ -1,5 +1,6 @@
 import unittest
 from nose.plugins.attrib import attr
+import tempfile
 
 
 from .. import mpath
@@ -96,6 +97,42 @@ class Test_Path (unittest.TestCase):
     def test_canGetParts_windows_ignoresTrailing (self):
         part = mpath.Path("C:/Users/user/projects///")
         self.assertEquals(part.parts, ["C:", "Users", "user", "projects"])
+
+    def test_knowsPathExists (self):
+        tmpfile = tempfile.NamedTemporaryFile("w", suffix=".tmp")
+        path = mpath.Path(tmpfile.name)
+        self.assertTrue(path.exists())
+
+    def test_knowsPathDoesNotExist (self):
+        tmpfile = tempfile.NamedTemporaryFile("w")
+        path = mpath.Path(tmpfile.name + "DoesNotExist.tmp")
+        self.assertFalse(path.exists())
+
+    def test_knowsExistingFileIsAFile (self):
+        tmpfile = tempfile.NamedTemporaryFile("w", suffix=".tmp")
+        path = mpath.Path(tmpfile.name)
+        self.assertTrue(path.isfile())
+
+    def test_knowsNonExistingFileIsNotAFile (self):
+        path = mpath.Path(tempfile.gettempdir() + "/madeUp.fil")
+        self.assertFalse(path.isfile())
+
+    def test_knowsExistingDirIsNotAFile (self):
+        path = mpath.Path(tempfile.gettempdir())
+        self.assertFalse(path.isfile())
+
+    def test_knowsExistingDirIsADir (self):
+        path = mpath.Path(tempfile.gettempdir())
+        self.assertTrue(path.isdir())
+
+    def test_knowsExistingFileIsNotADir (self):
+        tmpfile = tempfile.NamedTemporaryFile("w", suffix=".tmp")
+        path = mpath.Path(tmpfile.name)
+        self.assertFalse(path.isdir())
+
+    def test_knowsNonExistingDirIsNotADir (self):
+        path = mpath.Path( "/DoesNotExist")
+        self.assertFalse(path.isdir())
 
 
 class Test_MPaths (unittest.TestCase):
