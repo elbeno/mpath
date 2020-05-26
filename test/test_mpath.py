@@ -73,6 +73,14 @@ class Test_Path (unittest.TestCase):
         path = mpath.Path("root")
         self.assertEquals(str(path), "root")
 
+    def test_pathLength_linux (self):
+        path = mpath.Path("/home/user/stuff")
+        self.assertEquals(len(path), 16)
+
+    def test_pathLength_windows (self):
+        path = mpath.Path("C:/Users/user/games")
+        self.assertEquals(len(path), 19)
+
     def test_equalityWorksWithStrings (self):
         path = mpath.Path("root")
         self.assertEquals(path, "root")

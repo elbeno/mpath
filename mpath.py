@@ -53,6 +53,9 @@ class Path (object):
         path = prefix + "/".join(self.parts)
         return path
 
+    def __len__ (self):
+        return len(str(self))
+
     def __eq__ (self, other):
         return str(self) == str(other)
 
