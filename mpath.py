@@ -84,13 +84,13 @@ class MPaths (dict):
         self.pathTree = pathTree
         self.dotSyntax = dotSyntax
         self.pathTable = {}
-        self.__buildPaths(pathTree)
+        self.buildPaths(pathTree)
 
-    def __buildPaths (self, tree, prefix=""):
+    def buildPaths (self, tree, prefix=""):
         for n, r, ps in tree:
             pathSoFar = os.path.normpath(os.path.join(prefix, r))
             self[n] = Path(pathSoFar)
-            self.__buildPaths(ps, prefix=pathSoFar)
+            self.buildPaths(ps, prefix=pathSoFar)
         if self.dotSyntax:
             for key in self.keys():
                 setattr(self, key, self[key])
