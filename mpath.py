@@ -59,6 +59,15 @@ class Path (object):
     def __eq__ (self, other):
         return str(self) == str(other)
 
+    def __iter__ (self):
+        return iter(str(self))
+
+    def __contains__ (self, elem):
+        return elem in str(self)
+
+    def __reversed__ (self):
+        return reversed(str(self))
+
     def exists (self):
         return os.path.exists(str(self))
 

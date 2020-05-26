@@ -81,6 +81,30 @@ class Test_Path (unittest.TestCase):
         path = mpath.Path("C:/Users/user/games")
         self.assertEquals(len(path), 19)
 
+    def test_iter (self):
+        path = mpath.Path("/usr/local/iter")
+        it = iter(path)
+        first = it.next()
+        out = [first]
+        for i in it:
+            out += i
+        self.assertEquals(''.join(out), path)
+
+    def test_canTestMembership (self):
+        path = mpath.Path("/usr/share/dict/words")
+        self.assertTrue("share" in path)
+        self.assertFalse("nope" in path)
+
+    def test_reverse_linux (self):
+        pathStr = "/usr/bin/share"
+        path = mpath.Path(pathStr)
+        self.assertEquals(list(reversed(path)), list(reversed(pathStr)))
+
+    def test_reverse_windows (self):
+        pathStr = "C:/Users/user/games"
+        path = mpath.Path(pathStr)
+        self.assertEquals(list(reversed(path)), list(reversed(pathStr)))
+
     def test_equalityWorksWithStrings (self):
         path = mpath.Path("root")
         self.assertEquals(path, "root")
