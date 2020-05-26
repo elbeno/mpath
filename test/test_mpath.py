@@ -301,3 +301,8 @@ class Test_MPaths (unittest.TestCase):
         expected = "{ charExp: Z:/game/assets/chars\n, charSrc: C:/game/art/chars\n, docs: C:/game/Docs\n, expRoot: Z:/game\n, itemsDoc: C:/game/Docs/items.json\n, srcRoot: C:/game }"
         self.assertEquals(str(mpaths), expected)
 
+    def test_pformat_createsAPrettifiedString (self):
+        mpaths = mpath.fromLayoutStr(winALayout)
+        expected = "C:/game (srcRoot)\n    art/chars (charSrc)\n    Docs (docs)\n        items.json (itemsDoc)\nZ:/game (expRoot)\n    assets/chars (charExp)"
+        self.assertEquals(mpaths.pformat(), expected)
+

@@ -95,8 +95,13 @@ class MPaths (dict):
             for key in self.keys():
                 setattr(self, key, self[key])
 
+    def pformat (self):
+        indent = "    "
+        f = lambda level: lambda (name, part, subParts): "\n".join([indent * level + part + " (" + name + ")"] + map(f(level + 1), subParts))
+        return "\n".join(map(f(0), self.pathTree))
+
     def pprint (self):
-        print str(self) # not testable, unfortunately
+        print self.pformat() # not testable, unfortunately
 
 
 def fromLayoutStr (layoutStr, *args, **kwargs):
