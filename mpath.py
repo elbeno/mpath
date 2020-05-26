@@ -77,7 +77,7 @@ class MPaths (dict):
     def __buildPaths (self, tree, prefix=""):
         for n, r, ps in tree:
             pathSoFar = os.path.normpath(os.path.join(prefix, r))
-            self[n] = pathSoFar
+            self[n] = Path(pathSoFar)
             self.__buildPaths(ps, prefix=pathSoFar)
         if self.dotSyntax:
             for key in self.keys():

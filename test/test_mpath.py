@@ -173,3 +173,7 @@ class Test_MPaths (unittest.TestCase):
         self.assertEquals(mpaths.charSrc, "C:/game/art/chars")
         self.assertEquals(mpaths.itemsDoc, "C:/game/art/chars/Docs/items.json")
 
+    def test_builtPathsArePathInstances (self):
+        mpaths = mpath.fromLayoutStr(winALayout)
+        self.assertEquals(type(mpaths["itemsDoc"]), mpath.Path)
+
