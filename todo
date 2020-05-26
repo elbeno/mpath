@@ -1,25 +1,9 @@
-MPath
+P4 Path powers
 
-    store paths as parts
-
-create Path class
-
-    all mpaths should be Path instances
-
-    allows for easy addition of path powers
-
-        mpath["path"].exists()
-                     .isFile()
-                     .isDir()
-                     .inP4()
-                     .opened() -> [], [sdas, nnacu]
-                     .openedBy("sdas") -> False
-                     .lastEdited()
-
-        should also work on dot enabled syntax
-
-            mpath.path.exists()
-            etc
+    mpath["path"].inP4()
+                 .opened() -> [], [sdas, nnacu]
+                 .openedBy("sdas") -> False
+                 .lastEdited()
 
 helps for everything
 

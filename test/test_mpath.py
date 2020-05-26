@@ -177,3 +177,7 @@ class Test_MPaths (unittest.TestCase):
         mpaths = mpath.fromLayoutStr(winALayout)
         self.assertEquals(type(mpaths["itemsDoc"]), mpath.Path)
 
+    def test_builtPathsWorkWithDotSyntax (self):
+        mpaths = mpath.fromLayoutStr(winALayout)
+        self.assertEquals(type(mpaths.itemsDoc), mpath.Path)
+
