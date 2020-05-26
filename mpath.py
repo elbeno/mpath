@@ -87,10 +87,10 @@ class MPaths (dict):
         return body
 
     def buildPaths (self, tree, prefix=""):
-        for n, r, ps in tree:
-            pathSoFar = os.path.normpath(os.path.join(prefix, r))
-            self[n] = Path(pathSoFar)
-            self.buildPaths(ps, prefix=pathSoFar)
+        for name, part, subParts in tree:
+            pathSoFar = os.path.normpath(os.path.join(prefix, part))
+            self[name] = Path(pathSoFar)
+            self.buildPaths(subParts, prefix=pathSoFar)
         if self.dotSyntax:
             for key in self.keys():
                 setattr(self, key, self[key])
