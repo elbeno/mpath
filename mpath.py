@@ -7,7 +7,7 @@ ident = lambda x: x
 comp2 = lambda f: lambda g: lambda x: f(g(x))
 
 
-def parseLayout (layoutStr):
+def parseLayoutStr (layoutStr):
     hier = util.parseHier(layoutStr)
     layout = []
     layoutStack = [layout]
@@ -100,5 +100,5 @@ class MPaths (dict):
         print str(self) # not testable, unfortunately
 
 
-fromLayoutStr = comp2(MPaths)(parseLayout)
+fromLayoutStr = comp2(MPaths)(parseLayoutStr)
 

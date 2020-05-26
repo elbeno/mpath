@@ -40,48 +40,48 @@ expRoot|Z:/game
     charExp|assets/chars
 """
 
-class Test_parseLayout (unittest.TestCase):
+class Test_parseLayoutStr (unittest.TestCase):
 
     def test_parsesOneLevel (self):
         layoutStr = "root|/home/user"
-        layout = mpath.parseLayout(layoutStr)
+        layout = mpath.parseLayoutStr(layoutStr)
         expected = [("root", "/home/user", [])]
         self.assertEquals(layout, expected)
 
     def test_parsesTwoRoots (self):
         layoutStr = "root|/home/user\nroot2|/usr/bin"
-        layout = mpath.parseLayout(layoutStr)
+        layout = mpath.parseLayoutStr(layoutStr)
         expected = [("root", "/home/user", []), ("root2", "/usr/bin", [])]
         self.assertEquals(layout, expected)
 
     def test_parsesTwoLevels (self):
         layoutStr = "root|/home/user\n  proj|myProj/main"
-        layout = mpath.parseLayout(layoutStr)
+        layout = mpath.parseLayoutStr(layoutStr)
         expected = [("root", "/home/user", [("proj", "myProj/main", [])])]
         self.assertEquals(layout, expected)
 
     def test_parsesThreeLevels (self):
         layoutStr = "root|/home/user\n  proj|myProj/main\n    readme|README.TXT"
-        layout = mpath.parseLayout(layoutStr)
+        layout = mpath.parseLayoutStr(layoutStr)
         expected = [("root", "/home/user", [("proj", "myProj/main", [("readme", "README.TXT", [])])])]
         self.assertEquals(layout, expected)
 
     def test_canFallBackFromLevel1 (self):
         layoutStr = "root|C:/Users/username\n  docs|Documents\nbackup|D:/backup"
-        layout = mpath.parseLayout(layoutStr)
+        layout = mpath.parseLayoutStr(layoutStr)
         expected = [("root", "C:/Users/username", [("docs", "Documents", [])]), ("backup", "D:/backup", [])]
         self.assertEquals(layout, expected)
 
     def test_parsesTwoRootsWith2Levels (self):
         layoutStr = "src|D:/repo/game\n  code|code\nexp|Z:/game/export\n  assets|assets"
-        layout = mpath.parseLayout(layoutStr)
+        layout = mpath.parseLayoutStr(layoutStr)
         expected = [("src", "D:/repo/game", [("code", "code", [])]), ("exp", "Z:/game/export", [("assets", "assets", [])])]
         self.assertEquals(layout, expected)
 
     def test_parsesTwoItemsUnderRoot (self):
         # layoutStr = "root|/\n  usr|usr\n  boot|boot"
         layoutStr = "srcRoot|C:/game\n    charSrc|art/chars\n    docs|Docs"
-        layout = mpath.parseLayout(layoutStr)
+        layout = mpath.parseLayoutStr(layoutStr)
         # expected = [("root", "/", [("usr", "usr", []), ("boot", "boot", [])])]
         expected = [("srcRoot", "C:/game", [("charSrc", "art/chars", []), ("docs", "Docs", [])])]
         self.assertEquals(layout, expected)
@@ -93,12 +93,12 @@ srcRoot|C:/game
     docs|Docs
         itemsDoc|items.json
 """
-        layout = mpath.parseLayout(layoutStr)
+        layout = mpath.parseLayoutStr(layoutStr)
         expected = [("srcRoot", "C:/game", [("charSrc", "art/chars", []), ("docs", "Docs", [("itemsDoc", "items.json", [])])])]
         self.assertEquals(layout, expected)
 
     def test_buildsTree (self):
-        layout = mpath.parseLayout(winALayout)
+        layout = mpath.parseLayoutStr(winALayout)
         expected = [("srcRoot",
                      "C:/game",
                      [("charSrc",
@@ -254,7 +254,7 @@ class Test_MPaths (unittest.TestCase):
 
     def test_canMakeFromParsedLayout (self):
         # this one is more of an integration test
-        mpaths = mpath.MPaths(mpath.parseLayout(winALayout))
+        mpaths = mpath.MPaths(mpath.parseLayoutStr(winALayout))
         self.assertEquals(mpaths["srcRoot"], "C:/game")
         self.assertEquals(mpaths["charSrc"], "C:/game/art/chars")
         self.assertEquals(mpaths["itemsDoc"], "C:/game/Docs/items.json")
