@@ -222,3 +222,8 @@ class Test_MPaths (unittest.TestCase):
         mpaths = mpath.fromLayoutStr(winALayout)
         self.assertEquals(type(mpaths.itemsDoc), mpath.Path)
 
+    def test_stringifiesProperly (self):
+        mpaths = mpath.fromLayoutStr(winALayout)
+        expected = "{ charExp: C:/game/art/chars/Docs/items.json/assets/chars\n, charSrc: C:/game/art/chars\n, docs: C:/game/art/chars/Docs\n, expRoot: Z:/game\n, itemsDoc: C:/game/art/chars/Docs/items.json\n, srcRoot: C:/game }"
+        self.assertEquals(str(mpaths), expected)
+

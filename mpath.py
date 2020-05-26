@@ -86,6 +86,12 @@ class MPaths (dict):
         self.pathTable = {}
         self.buildPaths(pathTree)
 
+    def __str__ (self):
+        toLine = lambda (k, v): str(k) + ": " + str(v)
+        lines = map(toLine, sorted(self.items()))
+        body = "{ " + "\n, ".join(lines) + " }"
+        return body
+
     def buildPaths (self, tree, prefix=""):
         for n, r, ps in tree:
             pathSoFar = os.path.normpath(os.path.join(prefix, r))
