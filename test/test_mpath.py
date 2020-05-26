@@ -42,27 +42,87 @@ expRoot|Z:/game
 
 class Test_parseLayout (unittest.TestCase):
 
+    def test_parsesOneLevel (self):
+        layoutStr = "root|/home/user"
+        layout = mpath.parseLayout(layoutStr)
+        expected = [("root", "/home/user", [])]
+        self.assertEquals(layout, expected)
+
+    def test_parsesTwoRoots (self):
+        layoutStr = "root|/home/user\nroot2|/usr/bin"
+        layout = mpath.parseLayout(layoutStr)
+        expected = [("root", "/home/user", []), ("root2", "/usr/bin", [])]
+        self.assertEquals(layout, expected)
+
+    def test_parsesTwoLevels (self):
+        layoutStr = "root|/home/user\n  proj|myProj/main"
+        layout = mpath.parseLayout(layoutStr)
+        expected = [("root", "/home/user", [("proj", "myProj/main", [])])]
+        self.assertEquals(layout, expected)
+
+    def test_parsesThreeLevels (self):
+        layoutStr = "root|/home/user\n  proj|myProj/main\n    readme|README.TXT"
+        layout = mpath.parseLayout(layoutStr)
+        expected = [("root", "/home/user", [("proj", "myProj/main", [("readme", "README.TXT", [])])])]
+        self.assertEquals(layout, expected)
+
+    def test_canFallBackFromLevel1 (self):
+        layoutStr = "root|C:/Users/username\n  docs|Documents\nbackup|D:/backup"
+        layout = mpath.parseLayout(layoutStr)
+        expected = [("root", "C:/Users/username", [("docs", "Documents", [])]), ("backup", "D:/backup", [])]
+        self.assertEquals(layout, expected)
+
+    def test_parsesTwoRootsWith2Levels (self):
+        layoutStr = "src|D:/repo/game\n  code|code\nexp|Z:/game/export\n  assets|assets"
+        layout = mpath.parseLayout(layoutStr)
+        expected = [("src", "D:/repo/game", [("code", "code", [])]), ("exp", "Z:/game/export", [("assets", "assets", [])])]
+        self.assertEquals(layout, expected)
+
+    def test_parsesTwoItemsUnderRoot (self):
+        # layoutStr = "root|/\n  usr|usr\n  boot|boot"
+        layoutStr = "srcRoot|C:/game\n    charSrc|art/chars\n    docs|Docs"
+        layout = mpath.parseLayout(layoutStr)
+        # expected = [("root", "/", [("usr", "usr", []), ("boot", "boot", [])])]
+        expected = [("srcRoot", "C:/game", [("charSrc", "art/chars", []), ("docs", "Docs", [])])]
+        self.assertEquals(layout, expected)
+
+    def test_2And3Levels (self):
+        layoutStr = """
+srcRoot|C:/game
+    charSrc|art/chars
+    docs|Docs
+        itemsDoc|items.json
+"""
+        layout = mpath.parseLayout(layoutStr)
+        expected = [("srcRoot", "C:/game", [("charSrc", "art/chars", []), ("docs", "Docs", [("itemsDoc", "items.json", [])])])]
+        self.assertEquals(layout, expected)
+
     def test_buildsTree (self):
         layout = mpath.parseLayout(winALayout)
-        expected = [('srcRoot',
-                     'C:/game',
-                     [('charSrc',
-                       'art/chars',
-                       [('docs',
-                         'Docs',
-                         [('itemsDoc',
-                           'items.json',
-                           [('charExp',
-                             'assets/chars',
-                             []
-                            )]
-                          )]
-                        )]
-                      )]
+        expected = [("srcRoot",
+                     "C:/game",
+                     [("charSrc",
+                       "art/chars",
+                       []
+                      ),
+                      ("docs",
+                       "Docs",
+                       [("itemsDoc",
+                         "items.json",
+                         []
+                        )
+                       ]
+                      )
+                     ]
                     ),
-                    ('expRoot',
-                     'Z:/game',
-                     [])
+                    ("expRoot",
+                     "Z:/game",
+                     [("charExp",
+                       "assets/chars",
+                       []
+                      )
+                     ]
+                    )
                    ]
         self.assertEquals(layout, expected)
 
@@ -197,7 +257,7 @@ class Test_MPaths (unittest.TestCase):
         mpaths = mpath.MPaths(mpath.parseLayout(winALayout))
         self.assertEquals(mpaths["srcRoot"], "C:/game")
         self.assertEquals(mpaths["charSrc"], "C:/game/art/chars")
-        self.assertEquals(mpaths["itemsDoc"], "C:/game/art/chars/Docs/items.json")
+        self.assertEquals(mpaths["itemsDoc"], "C:/game/Docs/items.json")
         self.assertEquals(set(mpaths.keys()), set(["srcRoot", "charSrc", "docs", "itemsDoc", "expRoot", "charExp"]))
 
     def test_fromLayoutStrFunction (self):
@@ -205,14 +265,14 @@ class Test_MPaths (unittest.TestCase):
         mpaths = mpath.fromLayoutStr(winALayout)
         self.assertEquals(mpaths["srcRoot"], "C:/game")
         self.assertEquals(mpaths["charSrc"], "C:/game/art/chars")
-        self.assertEquals(mpaths["itemsDoc"], "C:/game/art/chars/Docs/items.json")
+        self.assertEquals(mpaths["itemsDoc"], "C:/game/Docs/items.json")
         self.assertEquals(set(mpaths.keys()), set(["srcRoot", "charSrc", "docs", "itemsDoc", "expRoot", "charExp"]))
 
     def test_dotSyntaxAllowsForEvenEasierPathLookup (self):
         mpaths = mpath.fromLayoutStr(winALayout)
         self.assertEquals(mpaths.srcRoot, "C:/game")
         self.assertEquals(mpaths.charSrc, "C:/game/art/chars")
-        self.assertEquals(mpaths.itemsDoc, "C:/game/art/chars/Docs/items.json")
+        self.assertEquals(mpaths.itemsDoc, "C:/game/Docs/items.json")
 
     def test_builtPathsArePathInstances (self):
         mpaths = mpath.fromLayoutStr(winALayout)
@@ -224,6 +284,6 @@ class Test_MPaths (unittest.TestCase):
 
     def test_stringifiesProperly (self):
         mpaths = mpath.fromLayoutStr(winALayout)
-        expected = "{ charExp: C:/game/art/chars/Docs/items.json/assets/chars\n, charSrc: C:/game/art/chars\n, docs: C:/game/art/chars/Docs\n, expRoot: Z:/game\n, itemsDoc: C:/game/art/chars/Docs/items.json\n, srcRoot: C:/game }"
+        expected = "{ charExp: Z:/game/assets/chars\n, charSrc: C:/game/art/chars\n, docs: C:/game/Docs\n, expRoot: Z:/game\n, itemsDoc: C:/game/Docs/items.json\n, srcRoot: C:/game }"
         self.assertEquals(str(mpaths), expected)
 
