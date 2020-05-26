@@ -101,6 +101,9 @@ class MPaths (dict):
             for key in self.keys():
                 setattr(self, key, self[key])
 
+    def pprint (self):
+        print str(self) # not testable, unfortunately
+
 
 fromLayoutStr = comp2(MPaths)(parseLayout)
 
