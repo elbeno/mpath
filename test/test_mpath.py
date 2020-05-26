@@ -140,7 +140,7 @@ class Test_MPaths (unittest.TestCase):
     def test_cannotConstructEmptyMPaths (self):
         self.assertRaises(TypeError, lambda: mpath.MPaths())
 
-    def test_buildPathsDict_removesTrailingSlashLinux (self):
+    def test_buildPaths_removesTrailingSlashLinux (self):
         mpaths = mpath.MPaths([("root", "/home/gfixler/", [])])
         self.assertEquals(mpaths["root"], "/home/gfixler")
 
@@ -159,7 +159,7 @@ class Test_MPaths (unittest.TestCase):
         self.assertEquals(mpaths["itemsDoc"], "C:/game/art/chars/Docs/items.json")
         self.assertEquals(set(mpaths.keys()), set(["srcRoot", "charSrc", "docs", "itemsDoc", "expRoot", "charExp"]))
 
-    def test_fromLayoutFunction (self):
+    def test_fromLayoutStrFunction (self):
         # this is a helper function, not part of the MPath class
         mpaths = mpath.fromLayoutStr(winALayout)
         self.assertEquals(mpaths["srcRoot"], "C:/game")
