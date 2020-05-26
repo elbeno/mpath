@@ -85,10 +85,19 @@ class Test_Path (unittest.TestCase):
         path = mpath.Path("root")
         self.assertEquals(path, "root")
 
+    def test_inequalityWorksWithStrings (self):
+        path = mpath.Path("same")
+        self.assertNotEquals(path, "different")
+
     def test_equalityWorksWithOtherPathInstances (self):
         partA = mpath.Path("root")
         partB = mpath.Path("root")
         self.assertEquals(partA, partB)
+
+    def test_inequalityWorksWithOtherPathInstances (self):
+        partA = mpath.Path("same")
+        partB = mpath.Path("different")
+        self.assertNotEquals(partA, partB)
 
     def test_canGetParts_linux (self):
         path = mpath.Path("/home/user/proj")
