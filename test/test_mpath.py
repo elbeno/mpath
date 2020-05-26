@@ -70,12 +70,12 @@ class Test_parseLayout (unittest.TestCase):
 class Test_Path (unittest.TestCase):
 
     def test_strYieldsPassedString (self):
-        part = mpath.Path("root")
-        self.assertEquals(str(part), "root")
+        path = mpath.Path("root")
+        self.assertEquals(str(path), "root")
 
     def test_equalityWorksWithStrings (self):
-        part = mpath.Path("root")
-        self.assertEquals(part, "root")
+        path = mpath.Path("root")
+        self.assertEquals(path, "root")
 
     def test_equalityWorksWithOtherPathInstances (self):
         partA = mpath.Path("root")
@@ -83,20 +83,20 @@ class Test_Path (unittest.TestCase):
         self.assertEquals(partA, partB)
 
     def test_canGetParts_linux (self):
-        part = mpath.Path("/home/user/proj")
-        self.assertEquals(part.parts, ["home", "user", "proj"])
+        path = mpath.Path("/home/user/proj")
+        self.assertEquals(path.parts, ["home", "user", "proj"])
 
     def test_canGetParts_linux_ignoresTrailing (self):
-        part = mpath.Path("/home/user/proj/")
-        self.assertEquals(part.parts, ["home", "user", "proj"])
+        path = mpath.Path("/home/user/proj/")
+        self.assertEquals(path.parts, ["home", "user", "proj"])
 
     def test_canGetParts_windows (self):
-        part = mpath.Path("C:/Users/user/projects")
-        self.assertEquals(part.parts, ["C:", "Users", "user", "projects"])
+        path = mpath.Path("C:/Users/user/projects")
+        self.assertEquals(path.parts, ["C:", "Users", "user", "projects"])
 
     def test_canGetParts_windows_ignoresTrailing (self):
-        part = mpath.Path("C:/Users/user/projects///")
-        self.assertEquals(part.parts, ["C:", "Users", "user", "projects"])
+        path = mpath.Path("C:/Users/user/projects///")
+        self.assertEquals(path.parts, ["C:", "Users", "user", "projects"])
 
     def test_knowsPathExists (self):
         tmpfile = tempfile.NamedTemporaryFile("w", suffix=".tmp")
