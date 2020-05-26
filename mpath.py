@@ -41,7 +41,7 @@ def parseLayout (layoutStr):
     return layout
 
 
-class Path (object):
+class Path (str):
 
     def __init__ (self, path):
         self.linuxStyle = True if path[0] == "/" else False
