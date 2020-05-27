@@ -105,8 +105,20 @@ class MPaths (dict):
 
     def pformat (self, indent=4, *args, **kwargs):
         indstr = " " * indent
-        f = lambda level: lambda (name, part, subParts): "\n".join([indstr * level + part + " (" + name + ")"] + map(f(level + 1), subParts))
-        return "\n".join(map(f(0), self.pathTree))
+        def pfStep (level):
+            def pfStepSub ((name, part, subParts)):
+                rendInd = indstr * level
+                if self[name].exists():
+                    if self[name].isdir():
+                        rendPart = part + "/"
+                    else:
+                        rendPart = part
+                else:
+                    rendPart = part
+                rendLine = rendInd + rendPart + " (" + name + ")"
+                return "\n".join([rendLine] + map(pfStep(level + 1), subParts))
+            return pfStepSub
+        return "\n".join(map(pfStep(0), self.pathTree))
 
     def pprint (self, *args, **kwargs):
         print self.pformat(*args, **kwargs) # not testable, unfortunately
