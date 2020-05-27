@@ -178,6 +178,9 @@ class MPaths (object):
                            )
             last_row = txt_name
 
+    def createMenuItem (self, label="Edit Paths..."):
+        cmds.menuItem(label=label, command=lambda *_: self.mayaForm())
+
 
 def fromLayoutStr (layoutStr, *args, **kwargs):
     return MPaths(parseLayoutStr(layoutStr), *args, **kwargs)
