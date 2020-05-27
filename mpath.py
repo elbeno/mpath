@@ -31,6 +31,7 @@ highly constrained DSL, which closely resembles a simple directory tree.
 """
 import os
 import re
+import json
 
 try:
     import maya.cmds as cmds
@@ -122,6 +123,11 @@ class Path (str):
         singleSlashes = re.sub("/+", "/", noBackslashes)
         noTrailingSlash = re.sub("/$", "", singleSlashes)
         return noTrailingSlash
+
+    def loadJSON (self):
+        with open(str(self), "r") as f:
+            data = json.loads(f.read())
+        return data
 
 
 class MPaths (object):

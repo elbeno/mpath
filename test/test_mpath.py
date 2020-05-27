@@ -1,6 +1,7 @@
 import unittest
 from nose.plugins.attrib import attr
 import tempfile
+import json
 
 
 from .. import mpath
@@ -347,4 +348,13 @@ class Test_MPaths (unittest.TestCase):
         mpaths = mpath.fromLayoutStr("foo", winALayout)
         expected = "C:/game (srcRoot)\n  art/chars (charSrc)\n  Docs (docs)\n    items.json (itemsDoc)\nZ:/game (expRoot)\n  assets/chars (charExp)"
         self.assertEquals(mpaths.pformat(indent=2), expected)
+
+    def test_loadJSON_canLoadJSONFile (self):
+        tmpdir = mpath.Path(tempfile.gettempdir())
+        jsonData = {"this": {"is": ["a", "test"]}}
+        mpaths = mpath.fromLayoutStr("jsonTest", "root|" + str(tmpdir) + "\n  jsonFile|data.json")
+        with open(str(mpaths.jsonFile), "w") as f:
+            f.write(json.dumps(jsonData))
+        jsonImport = mpaths.jsonFile.loadJSON()
+        self.assertEquals(jsonImport, jsonData)
 
