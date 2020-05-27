@@ -79,10 +79,8 @@ class Test_parseLayoutStr (unittest.TestCase):
         self.assertEquals(layout, expected)
 
     def test_parsesTwoItemsUnderRoot (self):
-        # layoutStr = "root|/\n  usr|usr\n  boot|boot"
         layoutStr = "srcRoot|C:/game\n    charSrc|art/chars\n    docs|Docs"
         layout = mpath.parseLayoutStr(layoutStr)
-        # expected = [("root", "/", [("usr", "usr", []), ("boot", "boot", [])])]
         expected = [("srcRoot", "C:/game", [("charSrc", "art/chars", []), ("docs", "Docs", [])])]
         self.assertEquals(layout, expected)
 
@@ -241,13 +239,13 @@ class Test_Path (unittest.TestCase):
         path = mpath.Path("/DoesNotExist")
         self.assertFalse(path.isdir())
 
-    def test_extendWithMoreParts (self):
+    def test_extend_canAddMoreParts (self):
         path = mpath.Path("C:/Game/Chars")
         curChar = "Bob"
         newPath = path.extend(curChar, "Props/Sword")
         self.assertEquals(newPath, "C:/Game/Chars/Bob/Props/Sword")
 
-    def test_extendWithMismatchedAndRepeatedPathSeparators (self):
+    def test_extend_canAddPartsWithMismatchedAndRepeatedPathSeparators (self):
         path = mpath.Path("C:/Game\\\\Chars/")
         curChar = "\\//\\Bob\\//\\"
         newPath = path.extend(curChar, "\\Props\\Sword/\\")

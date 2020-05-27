@@ -18,7 +18,7 @@ def parseIndent (line):
     else:
         return (0, line)
 
-def parseStrHier (string, normalize=True, filterEmpty=True):
+def parseHierStr (string, normalize=True, filterEmpty=True):
     lines = string.splitlines()
     withIndents = map(parseIndent, lines)
     p = snd if filterEmpty else true
