@@ -261,7 +261,7 @@ class Test_MPaths (unittest.TestCase):
         mpaths = mpath.MPaths([("root", "/home/gfixler/", [])])
         self.assertEquals(mpaths["root"], "/home/gfixler")
 
-    def test_canGetPathsByName (self):
+    def test_canGetPathsByNameViaDictSyntax (self):
         mpaths = mpath.MPaths(linA)
         self.assertEquals(mpaths["root"], "/home/gfixler/proj")
         self.assertEquals(mpaths["charSrc"], "/home/gfixler/proj/art/chars")
@@ -316,6 +316,27 @@ class Test_MPaths (unittest.TestCase):
         mpaths = mpath.fromLayoutStr(winALayout)
         expected = "{ charExp: Z:/game/assets/chars\n, charSrc: C:/game/art/chars\n, docs: C:/game/Docs\n, expRoot: Z:/game\n, itemsDoc: C:/game/Docs/items.json\n, srcRoot: C:/game }"
         self.assertEquals(str(mpaths), expected)
+
+    def test_canGetPathsKeys (self):
+        mpaths = mpath.fromLayoutStr(winALayout)
+        expected = ["itemsDoc", "docs", "charExp", "srcRoot", "expRoot", "charSrc"]
+        self.assertEquals(set(mpaths.keys()), set(expected))
+
+    def test_canGetPathsValues (self):
+        mpaths = mpath.fromLayoutStr(winALayout)
+        expected = ["C:/game/art/chars", "Z:/game/assets/chars", "C:/game/Docs", "Z:/game", "C:/game", "C:/game/Docs/items.json"]
+        self.assertEquals(set(mpaths.values()), set(expected))
+
+    def test_canGetPathsItems (self):
+        mpaths = mpath.fromLayoutStr(winALayout)
+        expected = [("expRoot", "Z:/game"), ("charExp", "Z:/game/assets/chars"), ("itemsDoc", "C:/game/Docs/items.json"), ("charSrc", "C:/game/art/chars"), ("srcRoot", "C:/game"), ("docs", "C:/game/Docs")]
+        self.assertEquals(set(mpaths.items()), set(expected))
+
+    def test_notAllowedToSetKeys (self):
+        # MPaths are supposed to be an immutable source of truth, but you can get around it via .paths
+        mpaths = mpath.fromLayoutStr(winALayout)
+        def noCanDo (): mpaths["itemsDoc"] = "I can't go for that"
+        self.assertRaises(KeyError, noCanDo)
 
     def test_pformat_createsAPrettifiedString (self):
         mpaths = mpath.fromLayoutStr(winALayout)

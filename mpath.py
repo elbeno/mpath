@@ -85,36 +85,53 @@ class Path (str):
         return noTrailingSlash
 
 
-class MPaths (dict):
+class MPaths (object):
 
     def __init__ (self, pathTree, dotSyntax=True, *args, **kwargs):
         self.pathTree = pathTree
         self.dotSyntax = dotSyntax
-        self.pathTable = {}
+        self.paths = {}
         self.buildPaths(pathTree)
 
     def __str__ (self):
         toLine = lambda (k, v): str(k) + ": " + str(v)
-        lines = map(toLine, sorted(self.items()))
+        lines = map(toLine, sorted(self.paths.items()))
         body = "{ " + "\n, ".join(lines) + " }"
         return body
+
+    def __getitem__ (self, item):
+        if item in self.paths:
+            return self.paths[item]
+        raise KeyError, "No path with the name \"" + item + "\" in MPaths"
+
+    def __setitem__ (self, _, __):
+        raise KeyError, "Item assignemt on MPaths instance not allowed (but if you must, do so on the instance's .paths property)"
+
+    def keys (self):
+        return self.paths.keys()
+
+    def values (self):
+        return self.paths.values()
+
+    def items (self):
+        return self.paths.items()
 
     def buildPaths (self, tree, prefix=""):
         for name, part, subParts in tree:
             pathSoFar = os.path.normpath(os.path.join(prefix, part))
-            self[name] = Path(pathSoFar)
+            self.paths[name] = Path(pathSoFar)
             self.buildPaths(subParts, prefix=pathSoFar)
         if self.dotSyntax:
-            for key in self.keys():
-                setattr(self, key, self[key])
+            for key in self.paths.keys():
+                setattr(self, key, self.paths[key])
 
     def pformat (self, indent=4, *args, **kwargs):
         indstr = " " * indent
         def pfStep (level):
             def pfStepSub ((name, part, subParts)):
                 rendInd = indstr * level
-                if self[name].exists():
-                    if self[name].isdir():
+                if self.paths[name].exists():
+                    if self.paths[name].isdir():
                         rendPart = part + "/"
                     else:
                         rendPart = part
