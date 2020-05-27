@@ -1,4 +1,5 @@
 import os
+import re
 
 from . import util
 
@@ -70,6 +71,13 @@ class Path (str):
 
     def isdir (self):
         return os.path.isdir(str(self))
+
+    def extend (self, *args):
+        prelimPath = "/".join([self] + list(args))
+        noBackslashes = re.sub("\\\\", "/", prelimPath)
+        singleSlashes = re.sub("/+", "/", noBackslashes)
+        noTrailingSlash = re.sub("/$", "", singleSlashes)
+        return noTrailingSlash
 
 
 class MPaths (dict):

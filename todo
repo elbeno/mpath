@@ -1,7 +1,3 @@
-Allow merging in more path parts, immutably
-
-    mpaths.charSrc.extend(charName, defAttireDir, defAttire)
-
 P4 Path powers
 
     mpath["path"].inP4()

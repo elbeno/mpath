@@ -232,8 +232,20 @@ class Test_Path (unittest.TestCase):
         self.assertFalse(path.isdir())
 
     def test_knowsNonExistingDirIsNotADir (self):
-        path = mpath.Path( "/DoesNotExist")
+        path = mpath.Path("/DoesNotExist")
         self.assertFalse(path.isdir())
+
+    def test_extendWithMoreParts (self):
+        path = mpath.Path("C:/Game/Chars")
+        curChar = "Bob"
+        newPath = path.extend(curChar, "Props/Sword")
+        self.assertEquals(newPath, "C:/Game/Chars/Bob/Props/Sword")
+
+    def test_extendWithMismatchedAndRepeatedPathSeparators (self):
+        path = mpath.Path("C:/Game\\\\Chars/")
+        curChar = "\\//\\Bob\\//\\"
+        newPath = path.extend(curChar, "\\Props\\Sword/\\")
+        self.assertEquals(newPath, "C:/Game/Chars/Bob/Props/Sword")
 
 
 class Test_MPaths (unittest.TestCase):
