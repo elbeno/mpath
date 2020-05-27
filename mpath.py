@@ -1,6 +1,11 @@
 import os
 import re
 
+try:
+    import maya.cmds as cmds
+except ImportError:
+    print 'WARNING (%s): failed to load maya.cmds module.' % __file__
+
 from . import util
 
 
@@ -120,8 +125,41 @@ class MPaths (dict):
             return pfStepSub
         return "\n".join(map(pfStep(0), self.pathTree))
 
+    # untestable methods (UI, printing) follow
+
     def pprint (self, *args, **kwargs):
-        print self.pformat(*args, **kwargs) # not testable, unfortunately
+        print self.pformat(*args, **kwargs)
+
+    def mayaForm (self, indent=8):
+        win = cmds.window(title="MPaths Path Editor", widthHeight=(400, 200))
+        cmds.showWindow()
+        cmds.scrollLayout(childResizable=True)
+        form = cmds.formLayout()
+        box_part = cmds.frameLayout(label="Path Part", parent=form)
+        box_name = cmds.frameLayout(label="Part Name", parent=form)
+        cmds.formLayout(form, edit=True, attachPosition=( (box_part, "right", 1, 70)
+                                                        , (box_name, "left", 1, 70) )
+                                       , attachForm=( (box_part, "left", 2)
+                                                    , (box_name, "right", 2) )
+                       )
+        pretty = self.pformat(indent=indent)
+        last_row = box_name
+        for line in pretty.split("\n"):
+            m = re.match("^( *)(.*) \((.*)\)$", line)
+            indent, part, name = m.groups()
+            txt_indent = cmds.text(label=indent, parent=form)
+            txt_part = cmds.textField(text=part, parent=form)
+            txt_name = cmds.textField(text=name, parent=form)
+            cmds.formLayout(form, edit=True, attachForm=( (txt_indent, "left", 1)
+                                                        , (txt_name, "right", 1) )
+                                            , attachPosition=( (txt_name, "left", 1, 70)
+                                                             , (txt_part, "right", 1, 70) )
+                                            , attachControl=( (txt_part, "left", 0, txt_indent)
+                                                            , (txt_indent, "top", 1, last_row)
+                                                            , (txt_part, "top", 1, last_row)
+                                                            , (txt_name, "top", 1, last_row) )
+                           )
+            last_row = txt_name
 
 
 def fromLayoutStr (layoutStr, *args, **kwargs):
