@@ -148,7 +148,7 @@ class MPaths (object):
         print self.pformat(*args, **kwargs)
 
     def mayaForm (self, indent=8):
-        win = cmds.window(title="MPaths Path Editor", widthHeight=(400, 200))
+        win = cmds.window(title="MPaths Path Editor", widthHeight=(400, 300))
         cmds.showWindow()
         cmds.scrollLayout(childResizable=True)
         form = cmds.formLayout()
