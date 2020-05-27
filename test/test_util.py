@@ -82,6 +82,13 @@ class Test_parseStrHier (unittest.TestCase):
         expected = [(0, ""), (8, "This is"), (12, "a test"), (12, "of"), (16, "a multiline"), (8, "string"), (8, "")]
         self.assertEquals(util.parseStrHier(example, normalize=False, filterEmpty=False), expected)
 
+    def test_indentingAndOutdentingSeveralTimes (self):
+        hierStr = "a\n  b\nc\n  d\ne"
+        print hierStr
+        layout = util.parseStrHier(hierStr)
+        expected = [(0, "a"), (1, "b"), (0, "c"), (1, "d"), (0, "e")]
+        self.assertEquals(layout, expected)
+
     def test_worksWithTabsEvenThoughtIHateThem (self):
         tabbedHier = """
 home|/home/user

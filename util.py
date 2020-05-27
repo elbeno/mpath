@@ -33,16 +33,14 @@ def parseStrHier (string, normalize=True, filterEmpty=True):
     normalized = []
     for linenum, (indent, part) in enumerate(filtered):
         if indent > curIndent:
+            indentStack.append(curIndent)
             curIndent = indent
-            indentStack.append(indent)
             normLevel = normLevel + 1
         elif indent < curIndent:
-            while True:
-                if indentStack == []:
+            while curIndent > indent:
+                if indent not in indentStack:
                     raise RuntimeError, "outdent to non-existing indent level in line " + str(linenum + 1) + ": " + str((indent, part))
                 curIndent = indentStack.pop()
-                if curIndent == indent:
-                    break
                 normLevel = normLevel - 1
         normalized.append((normLevel, part))
     return normalized

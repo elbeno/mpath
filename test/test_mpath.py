@@ -86,6 +86,12 @@ class Test_parseLayoutStr (unittest.TestCase):
         expected = [("srcRoot", "C:/game", [("charSrc", "art/chars", []), ("docs", "Docs", [])])]
         self.assertEquals(layout, expected)
 
+    def test_indentingAndOutdentingSeveralTimes (self):
+        layoutStr = "a|a\n  b|b\n    c|c\n  d|d\n    e|e\n  f|f\n    g|g"
+        layout = mpath.parseLayoutStr(layoutStr)
+        expected = [("a", "a", [("b", "b", [("c", "c", [])]), ("d", "d", [("e", "e", [])]), ("f", "f", [("g", "g", [])])])]
+        self.assertEquals(layout, expected)
+
     def test_2And3Levels (self):
         layoutStr = """
 srcRoot|C:/game
