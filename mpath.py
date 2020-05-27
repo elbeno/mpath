@@ -119,7 +119,7 @@ class MPaths (object):
     def buildPaths (self, tree, prefix=""):
         for name, part, subParts in tree:
             pathSoFar = os.path.normpath(os.path.join(prefix, part))
-            self.paths[name] = Path(pathSoFar)
+            self.paths[name] = Path(pathSoFar.replace("\\", "/"))
             self.buildPaths(subParts, prefix=pathSoFar)
         if self.dotSyntax:
             for key in self.paths.keys():
