@@ -126,7 +126,8 @@ class Path (str):
 
 class MPaths (object):
 
-    def __init__ (self, pathTree, dotSyntax=True, *args, **kwargs):
+    def __init__ (self, pathSetName, pathTree, dotSyntax=True, *args, **kwargs):
+        self.pathSetName = pathSetName
         self.pathTree = pathTree
         self.dotSyntax = dotSyntax
         self.paths = {}
@@ -221,7 +222,7 @@ class MPaths (object):
         cmds.menuItem(label=label, command=lambda *_: self.mayaForm())
 
 
-def fromLayoutStr (layoutStr, *args, **kwargs):
+def fromLayoutStr (pathSetName, layoutStr, *args, **kwargs):
     """This is the intended entry point for creating an MPaths object.
 
     Description:
@@ -294,5 +295,5 @@ def fromLayoutStr (layoutStr, *args, **kwargs):
 
     """
 
-    return MPaths(parseLayoutStr(layoutStr), *args, **kwargs)
+    return MPaths(pathSetName, parseLayoutStr(layoutStr), *args, **kwargs)
 

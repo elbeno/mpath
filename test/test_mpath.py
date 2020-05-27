@@ -258,11 +258,11 @@ class Test_MPaths (unittest.TestCase):
         self.assertRaises(TypeError, lambda: mpath.MPaths())
 
     def test_buildPaths_removesTrailingSlashLinux (self):
-        mpaths = mpath.MPaths([("root", "/home/gfixler/", [])])
+        mpaths = mpath.MPaths("foo", [("root", "/home/gfixler/", [])])
         self.assertEquals(mpaths["root"], "/home/gfixler")
 
     def test_canGetPathsByNameViaDictSyntax (self):
-        mpaths = mpath.MPaths(linA)
+        mpaths = mpath.MPaths("foo", linA)
         self.assertEquals(mpaths["root"], "/home/gfixler/proj")
         self.assertEquals(mpaths["charSrc"], "/home/gfixler/proj/art/chars")
         self.assertEquals(mpaths["charExp"], "/home/gfixler/proj/assets/chars")
@@ -270,7 +270,7 @@ class Test_MPaths (unittest.TestCase):
 
     def test_canMakeFromParsedLayout (self):
         # this one is more of an integration test
-        mpaths = mpath.MPaths(mpath.parseLayoutStr(winALayout))
+        mpaths = mpath.MPaths("foo", mpath.parseLayoutStr(winALayout))
         self.assertEquals(mpaths["srcRoot"], "C:/game")
         self.assertEquals(mpaths["charSrc"], "C:/game/art/chars")
         self.assertEquals(mpaths["itemsDoc"], "C:/game/Docs/items.json")
@@ -278,7 +278,7 @@ class Test_MPaths (unittest.TestCase):
 
     def test_fromLayoutStrFunction (self):
         # this is a helper function, not part of the MPath class
-        mpaths = mpath.fromLayoutStr(winALayout)
+        mpaths = mpath.fromLayoutStr("foo", winALayout)
         self.assertEquals(mpaths["srcRoot"], "C:/game")
         self.assertEquals(mpaths["charSrc"], "C:/game/art/chars")
         self.assertEquals(mpaths["itemsDoc"], "C:/game/Docs/items.json")
@@ -286,65 +286,65 @@ class Test_MPaths (unittest.TestCase):
 
     def test_fromLayoutStrFunctionDefaultsToEnablingDotSyntax (self):
         # this is a helper function, not part of the MPath class
-        mpaths = mpath.fromLayoutStr(winALayout)
+        mpaths = mpath.fromLayoutStr("foo", winALayout)
         self.assertEquals(mpaths.srcRoot, "C:/game")
         self.assertEquals(mpaths.charSrc, "C:/game/art/chars")
         self.assertEquals(mpaths.itemsDoc, "C:/game/Docs/items.json")
 
     def test_fromLayoutStrFunctionDisablingDotSyntax (self):
         # this is a helper function, not part of the MPath class
-        mpaths = mpath.fromLayoutStr(winALayout, dotSyntax=False)
+        mpaths = mpath.fromLayoutStr("foo", winALayout, dotSyntax=False)
         self.assertRaises(AttributeError, lambda: mpaths.srcRoot)
         self.assertRaises(AttributeError, lambda: mpaths.charSrc)
         self.assertRaises(AttributeError, lambda: mpaths.itemsDoc)
 
     def test_dotSyntaxAllowsForEvenEasierPathLookup (self):
-        mpaths = mpath.fromLayoutStr(winALayout)
+        mpaths = mpath.fromLayoutStr("foo", winALayout)
         self.assertEquals(mpaths.srcRoot, "C:/game")
         self.assertEquals(mpaths.charSrc, "C:/game/art/chars")
         self.assertEquals(mpaths.itemsDoc, "C:/game/Docs/items.json")
 
     def test_builtPathsArePathInstances (self):
-        mpaths = mpath.fromLayoutStr(winALayout)
+        mpaths = mpath.fromLayoutStr("foo", winALayout)
         self.assertEquals(type(mpaths["itemsDoc"]), mpath.Path)
 
     def test_builtPathsWorkWithDotSyntax (self):
-        mpaths = mpath.fromLayoutStr(winALayout)
+        mpaths = mpath.fromLayoutStr("foo", winALayout)
         self.assertEquals(type(mpaths.itemsDoc), mpath.Path)
 
     def test_stringifiesProperly (self):
-        mpaths = mpath.fromLayoutStr(winALayout)
+        mpaths = mpath.fromLayoutStr("foo", winALayout)
         expected = "{ charExp: Z:/game/assets/chars\n, charSrc: C:/game/art/chars\n, docs: C:/game/Docs\n, expRoot: Z:/game\n, itemsDoc: C:/game/Docs/items.json\n, srcRoot: C:/game }"
         self.assertEquals(str(mpaths), expected)
 
     def test_canGetPathsKeys (self):
-        mpaths = mpath.fromLayoutStr(winALayout)
+        mpaths = mpath.fromLayoutStr("foo", winALayout)
         expected = ["itemsDoc", "docs", "charExp", "srcRoot", "expRoot", "charSrc"]
         self.assertEquals(set(mpaths.keys()), set(expected))
 
     def test_canGetPathsValues (self):
-        mpaths = mpath.fromLayoutStr(winALayout)
+        mpaths = mpath.fromLayoutStr("foo", winALayout)
         expected = ["C:/game/art/chars", "Z:/game/assets/chars", "C:/game/Docs", "Z:/game", "C:/game", "C:/game/Docs/items.json"]
         self.assertEquals(set(mpaths.values()), set(expected))
 
     def test_canGetPathsItems (self):
-        mpaths = mpath.fromLayoutStr(winALayout)
+        mpaths = mpath.fromLayoutStr("foo", winALayout)
         expected = [("expRoot", "Z:/game"), ("charExp", "Z:/game/assets/chars"), ("itemsDoc", "C:/game/Docs/items.json"), ("charSrc", "C:/game/art/chars"), ("srcRoot", "C:/game"), ("docs", "C:/game/Docs")]
         self.assertEquals(set(mpaths.items()), set(expected))
 
     def test_notAllowedToSetKeys (self):
         # MPaths are supposed to be an immutable source of truth, but you can get around it via .paths
-        mpaths = mpath.fromLayoutStr(winALayout)
+        mpaths = mpath.fromLayoutStr("foo", winALayout)
         def noCanDo (): mpaths["itemsDoc"] = "I can't go for that"
         self.assertRaises(KeyError, noCanDo)
 
     def test_pformat_createsAPrettifiedString (self):
-        mpaths = mpath.fromLayoutStr(winALayout)
+        mpaths = mpath.fromLayoutStr("foo", winALayout)
         expected = "C:/game (srcRoot)\n    art/chars (charSrc)\n    Docs (docs)\n        items.json (itemsDoc)\nZ:/game (expRoot)\n    assets/chars (charExp)"
         self.assertEquals(mpaths.pformat(), expected)
 
     def test_pformat_canChangeIndentSize (self):
-        mpaths = mpath.fromLayoutStr(winALayout)
+        mpaths = mpath.fromLayoutStr("foo", winALayout)
         expected = "C:/game (srcRoot)\n  art/chars (charSrc)\n  Docs (docs)\n    items.json (itemsDoc)\nZ:/game (expRoot)\n  assets/chars (charExp)"
         self.assertEquals(mpaths.pformat(indent=2), expected)
 
