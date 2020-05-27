@@ -13,7 +13,7 @@ ident = lambda x: x
 
 
 def parseLayoutStr (layoutStr):
-    hier = util.parseHier(layoutStr)
+    hier = util.parseStrHier(layoutStr)
     layout = []
     layoutStack = [layout]
     curLev = 0
