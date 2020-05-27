@@ -1,3 +1,34 @@
+"""
+MPath - Simple handling of projects paths for Autodesk Maya
+
+Description:
+    Pronounced "empath" - pathing tools that seem to know what you need.
+
+    This module provides the MPaths class, and a few supporting classes and
+    functions. MPaths are collections of project-level paths, important to a
+    user, and/or tooling, which can be passed into tools, to give them easy
+    access to absolute, project-level paths, with a host of helpful tooling
+    around them. Beneath the niceties, the core intention is to free users and
+    tool makers from the shackles of hardcoded paths throughout their codebase.
+
+Goals:
+    - avoid the brittleness of paths scattered throughout a codebase
+    - avoid the decades-old disaster of backslashes as path separators
+    - avoid the complications of Python's os.path module
+    - replace heuristics and searching, with determinism and knowing
+    - replace string substitution with explicit, trustworthy paths
+    - centralize important paths, to both folders and files
+    - allow easy access to commonly used paths, via simple names
+    - create a single source of truth for an entire project's pathing
+    - ease certain path needs, like existence and path type checks
+    - provide various formatting, outputting, and pretty-printing options
+    - enable smart, tool-level, UI access to path editing and overriding
+    - allow easy, temporary, recorded/reviewable, local path tweaks
+
+MPaths are specified very succinctly, and without repetition, in a small,
+highly constrained DSL, which closely resembles a simple directory tree.
+
+"""
 import os
 import re
 
@@ -13,6 +44,14 @@ ident = lambda x: x
 
 
 def parseLayoutStr (layoutStr):
+    """Convert a multiline path layout string to an MPaths style structure.
+
+    This is a mostly internal tool, not intended for library users.
+
+    See the documentation to fromLayoutStr to understand what a layout string
+    is, and how to properly create one for use in generating an MPaths object.
+
+    """
     hier = util.parseHierStr(layoutStr)
     layout = []
     layoutStack = [layout]
@@ -183,5 +222,77 @@ class MPaths (object):
 
 
 def fromLayoutStr (layoutStr, *args, **kwargs):
+    """This is the intended entry point for creating an MPaths object.
+
+    Description:
+        This is just a helper function, which delegates all work elsewhere.
+
+    A path layout string is a representation of a file tree in a multiline
+    string. The formatting of the string is simple, but very specific.
+
+    Path Layout String Rules:
+        - NO backslashes, anywhere, ever
+        - use spaces for indentation
+            - tabs should work, but are not supported, and are discouraged
+        - indents have similar rules to Python code indentation
+            - any number of spaces for indentation is fine (4 is standard)
+            - indents can be mismatched, provided they're consistent
+            - an outdent to a non-existing, local level is an error
+        - multiple path parts can exist on one line, separated by slashes (/)
+        - EVERY line needs a name, prefixed to the part, joined by a pipe (|)
+        - blank lines are okay
+        - it doesn't matter if the entire multiline string is indented
+        - trailing slashes on folder-terminated parts okay, but not required
+
+    Path Layout String Examples:
+        It's helpful to start with a breakdown of the paths themselves:
+
+        '''
+        C:/Work/Project
+            Game/Main
+                Art
+                    Character19
+                    Character20
+                Exports
+                    Characters
+                Docs
+                    characterProps_v3_finalFINAL.xml
+                    allClothing_Setups.xml
+        Z:/Empath
+            Downloads/thirdParty
+                ExportTool/v3/doExport.py
+        '''
+
+        Now, name EVERY line, via pipe-connected prefix, and store in a var:
+
+        projLayoutStr='''
+        proj|C:/Work/Project
+            main|Game/Main
+                art|Art
+                    oldChars|Character19
+                    chars|Character20
+                exp|Exports
+                    charsExp|Characters
+                docs|Docs
+                    props|characterProps_v3_finalFINAL.xml
+                    attires|allClothing_Setups.xml
+        server|Z:/Empath
+            3rdParty|Downloads/ExternalTools
+                exporter|ExportTool/v3/doExport.py
+        '''
+
+    MPaths Creation & Usage:
+        Now that you have a proper, rule-abiding, multiline string of your
+        project layout, you can parse it into a full MPaths instance:
+
+        MPaths.parseLayoutStr(projLayoutStr)
+
+        It's also possible to manually create a project layout (a recursive
+        list of 3-tuples), but it's not worth the effort, nor the bugs such
+        fiddly work is likely to create. The recommended way to create an
+        MPaths instance is with fromLayoutStr.
+
+    """
+
     return MPaths(parseLayoutStr(layoutStr), *args, **kwargs)
 
