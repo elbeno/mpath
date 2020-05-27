@@ -306,3 +306,8 @@ class Test_MPaths (unittest.TestCase):
         expected = "C:/game (srcRoot)\n    art/chars (charSrc)\n    Docs (docs)\n        items.json (itemsDoc)\nZ:/game (expRoot)\n    assets/chars (charExp)"
         self.assertEquals(mpaths.pformat(), expected)
 
+    def test_pformat_canChangeIndentSize (self):
+        mpaths = mpath.fromLayoutStr(winALayout)
+        expected = "C:/game (srcRoot)\n  art/chars (charSrc)\n  Docs (docs)\n    items.json (itemsDoc)\nZ:/game (expRoot)\n  assets/chars (charExp)"
+        self.assertEquals(mpaths.pformat(indent=2), expected)
+
