@@ -151,7 +151,7 @@ class MPaths (object):
         raise KeyError, "No path with the name \"" + item + "\" in MPaths"
 
     def __setitem__ (self, _, __):
-        raise KeyError, "Item assignemt on MPaths instance not allowed (but if you must, do so on the instance's .paths property)"
+        raise KeyError, "Item assignment on MPaths instance not allowed (but if you must, do so on the instance's .paths property)"
 
     def keys (self):
         return self.paths.keys()
