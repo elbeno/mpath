@@ -10,13 +10,9 @@ swap = lambda (x, y): (y, x)
 
 
 def parseIndent (line):
-    match = re.match("^(\s+)", line)
-    if match:
-        indent = match.group()
-        indentLen = len(indent)
-        return (indentLen, line[indentLen:])
-    else:
-        return (0, line)
+    stripped = line.lstrip()
+    level = len(line) - len(stripped)
+    return (level, stripped)
 
 def parseHierStr (string, normalize=True, filterEmpty=True):
     lines = string.splitlines()
