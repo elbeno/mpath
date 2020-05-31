@@ -14,25 +14,25 @@ def parseIndent (line):
     indent = len(line) - len(stripped)
     return (indent, stripped)
 
-def normalizeIndents(lines, curIndent=0, level=0):
+def normalizeIndents(lines, expectedIndent=0, level=0):
     normalized = []
     while lines:
         (indent, line) = lines[0]
-        if indent > curIndent:
+        if indent > expectedIndent:
             raise RuntimeError, "outdent to non-existing indent level in line " + str((indent, line))
-        elif indent < curIndent:
+        elif indent < expectedIndent:
             return (normalized, lines)
 
         normalized.append((level, line))
-        (children, lines) = normalizeSubtree(lines[1:], curIndent, level+1)
+        (children, lines) = normalizeSubtree(lines[1:], expectedIndent, level+1)
         normalized.extend(children)
 
     return (normalized, lines)
 
-def normalizeSubtree (lines, curIndent=-1, level=0):
+def normalizeSubtree (lines, expectedIndent=-1, level=0):
     if lines:
         (nextIndent, _) = lines[0]
-        if nextIndent > curIndent:
+        if nextIndent > expectedIndent:
             return normalizeIndents(lines, nextIndent, level)
     return ([], lines)
 
