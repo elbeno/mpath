@@ -14,30 +14,28 @@ def parseIndent (line):
     level = len(line) - len(stripped)
     return (level, stripped)
 
+def normalizeIndents (indents, withIndents):
+    if not withIndents:
+        return []
+    (indent, line) = withIndents[0]
+    if not indents:
+        indents = [indent]
+    if indent == indents[-1]:
+        return [(len(indents) - 1, line)] + normalizeIndents(indents, withIndents[1:])
+    if indent > indents[-1]:
+        return [(len(indents), line)] + normalizeIndents(indents + [indent], withIndents[1:])
+    if indent < indents[-1]:
+        if indent not in indents:
+            raise RuntimeError, "outdent to non-existing indent level in " +  str((indent, line))
+        return normalizeIndents(indents[:-1], withIndents)
+
 def parseHierStr (string, normalize=True, filterEmpty=True):
     lines = string.splitlines()
     withIndents = map(parseIndent, lines)
     p = snd if filterEmpty else true
     filtered = filter(p, withIndents)
-
-    if not normalize:
+    if normalize:
+        return normalizeIndents([], filtered)
+    else:
         return filtered
-
-    curIndent = -1
-    indentStack = []
-    normLevel = -1
-    normalized = []
-    for linenum, (indent, part) in enumerate(filtered):
-        if indent > curIndent:
-            indentStack.append(curIndent)
-            curIndent = indent
-            normLevel = normLevel + 1
-        elif indent < curIndent:
-            while curIndent > indent:
-                if indent not in indentStack:
-                    raise RuntimeError, "outdent to non-existing indent level in line " + str(linenum + 1) + ": " + str((indent, part))
-                curIndent = indentStack.pop()
-                normLevel = normLevel - 1
-        normalized.append((normLevel, part))
-    return normalized
 
