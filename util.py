@@ -14,27 +14,27 @@ def parseIndent (line):
     indent = len(line) - len(stripped)
     return (indent, stripped)
 
-def normalizeIndents(lines, index=0, curIndent=0, level=0):
+def normalizeIndents(lines, curIndent=0, level=0):
     normalized = []
-    while index < len(lines):
-        (indent, line) = lines[index]
+    while lines:
+        (indent, line) = lines[0]
         if indent > curIndent:
-            raise RuntimeError, "outdent to non-existing indent level in line " + str(index) + ": " + str((indent, line))
+            raise RuntimeError, "outdent to non-existing indent level in line " + str((indent, line))
         elif indent < curIndent:
-            return (normalized, index)
+            return (normalized, lines)
 
         normalized.append((level, line))
-        (children, index) = normalizeSubtree(lines, index+1, curIndent, level+1)
+        (children, lines) = normalizeSubtree(lines[1:], curIndent, level+1)
         normalized.extend(children)
 
-    return (normalized, index)
+    return (normalized, lines)
 
-def normalizeSubtree (lines, index=0, curIndent=-1, level=0):
-    if index < len(lines):
-        (nextIndent, _) = lines[index]
+def normalizeSubtree (lines, curIndent=-1, level=0):
+    if lines:
+        (nextIndent, _) = lines[0]
         if nextIndent > curIndent:
-            return normalizeIndents(lines, index, nextIndent, level)
-    return ([], index)
+            return normalizeIndents(lines, nextIndent, level)
+    return ([], lines)
 
 def parseHierStr(string, normalize=True, filterEmpty=True):
     lines = string.splitlines()
